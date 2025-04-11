@@ -3,44 +3,18 @@ title: "mfinn13_PeerCommentary_amitag_03"
 output: html_document
 date: "2025-03-29"
 ---
+#Comment: I'm not quite sure what's going on with this top section. I would probably just delete the two read.csv calls that don't have quotation marks, because those ones don't work. 
 
----
-title: "amitag_OriginalHomeworkCode_03”"
-output: html_document
-date: "2025-03-18"
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
-```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 zombies <- read.csv(https://raw.githubusercontent.com/fuzzyatelin/fuzzyatelin.github.io/refs/heads/master/AN588_Spring25/zombies.csv)
 library(readr)
 zombies <- read.csv(https://raw.githubusercontent.com/fuzzyatelin/fuzzyatelin.github.io/refs/heads/master/AN588_Spring25/zombies.csv)
 head(zombies)
 zombies <- read.csv("https://raw.githubusercontent.com/fuzzyatelin/fuzzyatelin.github.io/refs/heads/master/AN588_Spring25/zombies.csv")
 # Question 1 - Calculate the population mean and standard deviation for each quantitative random variable (height, weight, age, number of zombies killed, and years of education).
+
 # population mean
-pop_mean <- function(x) (sum(x) / length(x))
+pop_mean <- function(x) (sum(x) / length(x))  
+
 # population standard deviation
 pop_sd <- function(x) {
 mu <- pop_mean(x)
@@ -64,8 +38,10 @@ weight = c(mean = pop_mean_weight, sd = pop_sd_weight),
 age = c(mean = pop_mean_age, sd = pop_sd_age),
 zombies_killed = c(mean = pop_mean_kills, sd = pop_sd_kills),
 years_of_education = c(mean = pop_mean_edu, sd = pop_sd_edu)
-)
+) 
+#Comment: This is a cool use of the list() function. I printedo ouy my results a little differently but this works great. 
 library(ggplot2)
+
 # Question 2 - Use {ggplot} to make boxplots of each of these variables by gender.
 # Height Boxplot
 ggplot(zombies, aes(x = gender, y = height, fill = gender)) +
@@ -87,18 +63,30 @@ ggplot(zombies, aes(x = gender, y = zombies_killed, fill = gender)) +
 geom_boxplot() +
 labs(title = "Zombies Killed by Gender", x = "Gender", y = "Number of Zombies Killed") +
 theme_minimal()
+
+#Comment: Nice job! I've never used any of the themes with ggplot, so that's cool that you used one. 
+
 # Question 3 - Use {ggplot} to make scatterplots of height and weight in relation to age. Do these variables seem to be related? In what way?
 ggplot(zombies, aes(x = age, y = height)) +
 geom_point(alpha = 0.6, color = "green") +
 geom_smooth(method = "lm", se = FALSE, color = "red") +
 labs(title = "Height vs. Age", x = "Age", y = "Height") +
 theme_minimal() # scatterplot for Height vs. Age
+
+#comment: nice! i like the aesthetics. 
+
 ggplot(zombies, aes(x = age, y = weight)) +
 geom_point(alpha = 0.6, color = "blue") +
 geom_smooth(method = "lm", se = FALSE, color = "red") +
 labs(title = "Weight vs. Age", x = "Age", y = "Weight") +
 theme_minimal() # scatterplot of Weight vs. Age
+
+#comment: nice. 
+
+
+
 # Observations: height and age seem to be more related than weight and age as the clusters of points around the line in the first graph seem to follow the general upward trend of the red line itself, whereas the blue points seem to be more vaugely clustered in the second graph. In the height and age graph it appears that as age increases so does height. This kind of relationship with respect to age and weight is a little bit more difficult to decipher based on the scatterplot produced.
+
 # Question 4 - Using histograms and Q-Q plots, check whether the quantitative variables seem to be drawn from a normal distribution. Which seem to be and which do not (hint: not all are drawn from the normal distribution)? For those that are not normal, can you determine from which common distribution they are drawn?
 quant_vars <- c("height", "weight", "age", "zombies_killed", "years_of_education") #variables to check
 for (var in quant_vars) {
@@ -108,8 +96,14 @@ geom_histogram(bins = 30, fill = "blue", color = "black", alpha = 0.7) +
 labs(title = paste("Histogram of", var), x = var, y = "Frequency") +
 theme_minimal()
 )
-} # Loop through variables and plot histograms
+} 
+
+# Loop through variables and plot histograms
+
+#Comment: Wow this is quite different from what I did. I didn't use a for loop, nor did I know you could loop through strings like you did in line 92. I also did't use ggplot for the histograms, but ggplot can definitely make a prettier graph. When I run this though, it isn't actually printing any histograms. I'm not sure why. I just did one line of code for each variable: hist(variable). 
+
 # Q-Q plot
+
 for (var in quant_vars) {
 print(
 ggplot(zombies, aes(sample = .data[[var]])) +
@@ -120,6 +114,11 @@ theme_minimal()
 )
 }
 # the plots for height, weight, and age seem to come from normal distributions as the theoretical outcomes (the red line) overlaps quite closely with the balck points.
+
+#Comment: Same thing here. Really cool idea to use a loop and also to use ggplot. Unfortunately, when I run this I'm not actually getting any Q-Q plots. What I did was, instead of looping, I just used qqplot(variable) and qqline(variable) for each variable. 
+
+#Comment: I agree with your assessment of which variables are normally distributed. However, the question also asks to identify the distribution that fits the two other variables.
+
 library(dbplyr)
 # Question 5 - Now use the sample() function to sample ONE subset of 30 zombie survivors (without replacement) from this population and calculate the mean and sample standard deviation for each variable. Also estimate the standard error for each variable, and construct the 95% confidence interval for each mean. Note that for the variables that are not drawn from the normal distribution, you may need to base your estimate of the CIs on slightly different code than for the normal…
 set.seed(123) # set seed for reproducibility
@@ -172,6 +171,9 @@ return(mean(data[indices]))
 }
 boot_kills <- boot(zombie_sample$zombies_killed, mean_function, R = 1000)
 boot.ci(boot_kills, type = "perc")
+
+#Comment: I think this code could really benefit from some commenting to explain what you were doing. A lot of this is quite different from what I did so it was a bit difficult to follow. I noticed that you used piping which is really cool. All of the calculation seems correct to me. I was confused for a second where 1.96 was coming from but I remembered that that is the number of standard deviations away from the mean associated with a 95% confidence interval. Also, I don't think your code actually prints anything; it calculates everything but doesn't output it. I've never seen the boot() function before but thats pretty cool! I don't think you can calculate the CI for zombies killed and years of education the way that you did because they are not normally distributed. 
+
 # Question 6 - Now draw 99 more random samples of 30 zombie apocalypse survivors, and calculate the mean for each variable for each of these samples. Together with the first sample you drew, you now have a set of 100 means for each variable (each based on 30 observations), which constitutes a sampling distribution for each variable. What are the means and standard deviations of this distribution of means for each variable? How do the standard deviations of means compare to the standard errors estimated in [5]? What do these sampling distributions look like (a graph might help here)? Are they normally distributed? What about for those variables that you concluded were not originally drawn from a normal distribution?
 set.seed(123)
 means_list <- list()
@@ -234,4 +236,8 @@ facet_wrap(~ variable, scales = "free") +
 labs(title = "Sampling Distributions of Means", x = "Mean Value", y = "Frequency") +
 theme_minimal()
 # The distributions for each look fairly normal with some having a stronger bell shape curve than others. There is a little bit more irregularity in age and number of zombies killed.
-zombies <- read.csv(https://raw.githubusercontent.com/fuzzyatelin/fuzzyatelin.github.io/refs/heads/master/AN588_Spring25/zombies.csv)
+
+#Comment: Again, this is really hard to follow because there are not comments. I strongly recommend commenting on this code to make it very clear what each line is doing. And again, I'm not getting any output when I run this code. 
+
+#Comment: You are also missing your 5 challenges. Make sure to include those. 
+
